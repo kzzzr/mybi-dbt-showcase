@@ -1,0 +1,26 @@
+config:
+    send_anonymous_usage_stats: False
+    use_colors: True
+    partial_parse: True
+
+mybi_dbt_core:
+  target: clickhouse
+
+  outputs:
+  
+    clickhouse:
+      type: clickhouse
+      host: clickhouse
+      port: 8123
+      schema: default
+      threads: 4
+  
+    # postgres:
+    #   type: postgres
+    #   host: postgres
+    #   port: 5432
+    #   user: postgres
+    #   pass: postgres
+    #   dbname: postgres
+    #   schema: public
+    #   threads: 4

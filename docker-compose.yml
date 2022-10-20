@@ -1,0 +1,22 @@
+version: '2'
+services:
+
+  dbt:
+    build: .
+    volumes:
+     - .:/usr/app/
+    ports:
+      - "8080:8080" 
+
+  clickhouse:
+    image: clickhouse/clickhouse-server:22.3
+    ports:
+      - 9000:9000
+      - 8123:8123
+
+  # postgres:
+  #   image: postgres:14-alpine
+  #   ports:
+  #     - 5432:5432
+  #   environment:
+  #     - POSTGRES_PASSWORD=postgres
