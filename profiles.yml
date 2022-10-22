@@ -3,16 +3,16 @@ config:
     use_colors: True
     partial_parse: True
 
-mybi_dbt_core:
-  target: clickhouse
+mybi_dbt_tutorial:
+  target: prod
 
   outputs:
   
-    clickhouse:
+    prod:
       type: clickhouse
       host: clickhouse
       port: 8123
-      schema: default
+      schema: analytics
       threads: 4
   
     # postgres:
