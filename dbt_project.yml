@@ -1,17 +1,55 @@
-
-# Name your project! Project names should contain only lowercase characters
-# and underscores. A good package name should reflect your organization's
-# name or the intended use of these models
 name: 'mybi_dbt_tutorial'
 version: '1.0.0'
 config-version: 2
 
-# This setting configures which "profile" dbt uses for this project.
 profile: 'mybi_dbt_tutorial'
 
-# These configurations specify where dbt should look for different types of files.
-# The `model-paths` config, for example, states that models in this project can be
-# found in the "models/" directory. You probably won't need to change these!
+models:
+    mybi_dbt_core:
+        enabled: false
+        staging:
+            amocrm:
+                enabled: true
+            direct:
+                enabled: true
+            ga:
+                enabled: true
+            general:
+                enabled: true
+            mytarget:
+                enabled: true
+
+    mybi_dbt_tutorial:
+        +materialized: table
+        intermediate:
+            +schema: intermediate
+            +tags: ["intermediate"]
+
+vars:
+    mybi_host: 'rc1a-uifqtk602qck1es3.mdb.yandexcloud.net'
+    mybi_port: 6432
+    mybi_database: 'mybi-ilmwayp'
+    mybi_user: 'guest-ilmwayp'
+    mybi_password: 'nAYIVOexUj6s'
+    mybi_schema: 'public'
+
+
+    mybi_dbt_core:
+        limit_data_days: 5
+
+        dbt_source_database: mybi
+        dbt_source_schema: mybi
+
+        account_id_amocrm: 46021        
+        account_id_direct: 46105
+        account_id_ga: 45377
+        account_id_mytarget: 46637
+
+        caption_amocrm: 'amocrm'
+        caption_direct: 'yandex_direct'
+        caption_ga: 'google_analytics' 
+        caption_mytarget: 'mytarget' 
+
 model-paths: ["models"]
 analysis-paths: ["analyses"]
 test-paths: ["tests"]
@@ -21,18 +59,5 @@ snapshot-paths: ["snapshots"]
 
 target-path: "target"  # directory which will store compiled SQL files
 clean-targets:         # directories to be removed by `dbt clean`
-  - "target"
-  - "dbt_packages"
-
-
-# Configuring models
-# Full documentation: https://docs.getdbt.com/docs/configuring-models
-
-# In this example config, we tell dbt to build all models in the example/ directory
-# as tables. These settings can be overridden in the individual model files
-# using the `{{ config(...) }}` macro.
-models:
-  mybi_dbt_tutorial:
-    # Config indicated by + and applies to all files under models/example/
-    example:
-      +materialized: view
+    - "target"
+    - "dbt_packages"

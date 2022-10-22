@@ -1,0 +1,41 @@
+version: 2
+
+models:
+    - name: f_costs
+      description: Summary of all costs (of all sources)
+      columns:
+        - name: cost_id
+          description: surrogate key
+          tests:
+            - not_null
+            - unique
+        - name: dt
+          description: Date
+          tests:
+            - not_null
+    
+    - name: f_ga_events
+      description: Summary of all Google Analytics Events
+      columns:
+        - name: event_id
+          description: surrogate key
+          tests:
+            - not_null
+            - unique
+        - name: dt
+          description: Date
+          tests:
+            - not_null
+
+    - name: f_tracker
+      description: Summary of Google Analytics Events and Costs
+      columns:
+        - name: event_id
+          description: surrogate key
+          tests:
+            - not_null
+            - unique
+        - name: dt
+          description: Date
+          tests:
+            - not_null

@@ -1,0 +1,67 @@
+version: 2
+
+models:
+    - name: int_yd_campaigns_facts_context
+      description: Yandex.Direct campaign-level facts on context (РСЯ)
+      columns:
+        - name: cost_id
+          description: surrogate key
+          tests:
+            - not_null
+            - unique
+        - name: dt
+          description: Date
+          tests:
+            - not_null
+
+    - name: int_yd_campaigns_facts_search
+      description: Yandex.Direct campaign-level facts on search (Поиск)
+      columns:
+        - name: cost_id
+          description: surrogate key
+          tests:
+            - not_null
+            - unique
+        - name: dt
+          description: Date
+          tests:
+            - not_null
+
+    - name: int_mytarget_campaigns_facts
+      description: myTarget campaign-level facts
+      columns:
+        - name: cost_id
+          description: surrogate key
+          tests:
+            - not_null
+            - unique
+        - name: dt
+          description: Date
+          tests:
+            - not_null
+
+    - name: int_ga_sessions_facts
+      description: Google Analytics sessions facts
+      columns:
+        - name: event_id
+          description: Event unique identifier
+          tests:
+            - not_null
+            - unique
+        - name: dt
+          description: Date
+          tests:
+            - not_null
+
+    - name: int_ga_goals_facts
+      description: Google Analytics goal completions facts
+      columns:
+        - name: event_id
+          description: Event unique identifier
+          tests:
+            - not_null
+            - unique
+        - name: dt
+          description: Date
+          tests:
+            - not_null
