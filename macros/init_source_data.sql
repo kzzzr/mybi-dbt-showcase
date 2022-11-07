@@ -2,7 +2,7 @@
 
     {% set sql %}
 
-        CREATE DATABASE mybi
+        CREATE DATABASE IF NOT EXISTS mybi
         ENGINE = PostgreSQL(
               '{{ var("mybi_host") }}:{{ var("mybi_port") }}'
             , '{{ var("mybi_database") }}'
@@ -14,5 +14,7 @@
     {% endset %}
     
     {% set result = run_query(sql) %}
+
+    {{ print('Initialized source database') }}
 
 {%- endmacro %}
