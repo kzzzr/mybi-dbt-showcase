@@ -1,8 +1,8 @@
-name: 'mybi_dbt_tutorial'
+name: 'mybi_dbt_showcase'
 version: '1.0.0'
 config-version: 2
 
-profile: 'mybi_dbt_tutorial'
+profile: 'mybi_dbt_showcase'
 
 models:
     mybi_dbt_core:
@@ -19,7 +19,7 @@ models:
             mytarget:
                 enabled: true
 
-    mybi_dbt_tutorial:
+    mybi_dbt_showcase:
         +materialized: table
         intermediate:
             +schema: intermediate

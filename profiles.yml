@@ -3,7 +3,7 @@ config:
     use_colors: True
     partial_parse: True
 
-mybi_dbt_tutorial:
+mybi_dbt_showcase:
   target: prod
 
   outputs:
