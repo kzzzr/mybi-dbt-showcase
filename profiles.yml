@@ -12,15 +12,6 @@ mybi_dbt_tutorial:
       type: clickhouse
       host: clickhouse
       port: 8123
+      user: default
       schema: analytics
-      threads: 4
-  
-    # postgres:
-    #   type: postgres
-    #   host: postgres
-    #   port: 5432
-    #   user: postgres
-    #   pass: postgres
-    #   dbname: postgres
-    #   schema: public
-    #   threads: 4
+      threads: 3
