@@ -96,7 +96,6 @@ SELECT
 
     -- DEVICES
     , UPPER(device_category) AS device_category
-    , device_category
     , device_browser
     , device_browser_version
     , device_os
