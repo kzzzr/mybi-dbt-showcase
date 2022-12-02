@@ -1,0 +1,58 @@
+name: Publish dbt Documentation on PR Closed
+
+
+# triggers for the workflow
+on:
+  workflow_dispatch:
+  # See https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#pull_request_target
+  pull_request_target:
+    types:
+      - closed
+    branches:
+      - main
+
+
+jobs:
+  generate-dbt-docs:
+    name: Generate dbt docs
+    runs-on: ubuntu-latest
+    services:
+      clickhouse:
+        image: clickhouse/clickhouse-server:22.8
+        ports:
+          - 9000:9000
+          - 8123:8123    
+    
+    # Grant GITHUB_TOKEN the permissions required to make a Pages deployment
+    permissions:
+      pages: write      # to deploy to Pages
+      id-token: write   # to verify the deployment originates from an appropriate source
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    
+    steps:
+      - uses: actions/checkout@v3
+      - name: dbt debug
+        uses: kzzzr/mybi-dbt-action@v4
+        with:
+          command: dbt debug          
+      - name: dbt deps
+        uses: kzzzr/mybi-dbt-action@v4
+        with:
+          command: dbt deps
+      - name: dbt docs
+        uses: kzzzr/mybi-dbt-action@v4
+        with:
+          command: dbt docs generate
+      - name: Setup Pages
+        uses: actions/configure-pages@v2
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: 'target'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1
+
