@@ -2,7 +2,7 @@ name: Continuous Integration Tests
 
 on:
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 concurrency: 
   group: ${{ github.ref }}
   cancel-in-progress: true  
@@ -34,6 +34,10 @@ jobs:
         uses: kzzzr/mybi-dbt-action@v4
         with:
           command: dbt deps
+      - name: dbt init_source_data 
+        uses: kzzzr/mybi-dbt-action@v4
+        with:
+          command: dbt run-operation init_source_data
       - name: dbt seed
         uses: kzzzr/mybi-dbt-action@v4
         with:
@@ -42,8 +46,8 @@ jobs:
         uses: kzzzr/mybi-dbt-action@v4
         with:
           command: dbt build --full-refresh
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
-        if: ${{ failure() }}
-        timeout-minutes: 30
+      # - name: Setup tmate session
+      #   uses: mxschmitt/action-tmate@v3
+      #   if: ${{ failure() }}
+      #   timeout-minutes: 30
         
