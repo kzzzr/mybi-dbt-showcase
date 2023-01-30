@@ -77,7 +77,7 @@ SELECT
     , impressions
     , clicks
     , cost
-    , bounces
+    --, bounces
 
 FROM {{ ref('int_yd_campaigns_facts_search') }}
 

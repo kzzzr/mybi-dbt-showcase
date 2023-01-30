@@ -24,6 +24,8 @@ models:
         intermediate:
             +schema: intermediate
             +tags: ["intermediate"]
+        marts:
+            +tags: ["marts"]
 
 vars:
     mybi_host: 'rc1a-uifqtk602qck1es3.mdb.yandexcloud.net'
@@ -40,15 +42,11 @@ vars:
         dbt_source_database: mybi
         dbt_source_schema: mybi
 
-        account_id_amocrm: 46021        
+        account_id_amocrm: 46021
         account_id_direct: 46105
         account_id_ga: 45377
         account_id_mytarget: 46637
-
-        caption_amocrm: 'amocrm'
-        caption_direct: 'yandex_direct'
-        caption_ga: 'google_analytics' 
-        caption_mytarget: 'mytarget' 
+        
 
 model-paths: ["models"]
 analysis-paths: ["analyses"]

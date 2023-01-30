@@ -4,6 +4,7 @@ SELECT
     , {{ dbt_utils.surrogate_key([
           'facts.dt'
         , 'facts.session_id'
+        , 'facts.traffic_id'
         , 'facts.user_type'
         ]) }} AS event_id
     , facts.session_id AS session_id

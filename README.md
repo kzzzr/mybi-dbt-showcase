@@ -1,135 +1,180 @@
 # Demo project (tutorial)
 
-Intro  (description):
-- dbt project
-- Clickhouse + Metabase
-
-Requirements:
-- IDE
-- Docker
-
 TODO:
 - [ ] README.md with steps & GIFs
 - [ ] Table of contents
 - [x] TODO: release versions, install from tag not branch
 - [x] Pin repository
 
+![](https://habrastorage.org/webt/l-/1r/pq/l-1rpqoplxi-503grfeyyglux8g.jpeg)
+
+This repo guides you through building analyics for [myBI Market](https://market.mybi.ru/) with Modern Data Stack:
+
+- myBI Connect (Extract - Load tool)
+- Clickhouse (Database)
+- dbt (Transformations) + [mybi-dbt-core](https://github.com/kzzzr/mybi-dbt-core) module
+- Metabase (Business Intelligence)
+- Github Actions (Continuous Integration + Deployment)
+
+Prerequisites:
+- IDE (e.g. [VS Code](https://code.visualstudio.com/docs/setup/setup-overview))
+- [Docker](https://docs.docker.com/engine/install/)
+
 ## Configure environment
 
-- [x] Init dbt project
-- [x] Choose database: Clickhouse
-- [x] Configure Docker containers (dbt, clickhouse, postgres)
+1. Fork & Clone this repository and open in IDE
+
+2. Spin up Docker containers
+
+    All the services are configured via [Docker containers](./docker-compose.yml).
+
+    - dbt
+    - Clickhouse
+    - Metabase
+
+    ```bash
+    # launch containers: dbt, clickhouse, metabase
+    docker-compose build --no-cache
+    docker-compose up -d
+
+    # alias running dbt commands in a docker container
+    alias dev="docker-compose exec dev"
+
+    # test connections
+    dev dbt --version
+    dev dbt debug
+    ```
+
+    ![Spin up Docker containers](./docs/1_docker_containers.gif)
+
+## Install and configure mybi_dbt_core package
+
+1. Install module via [packages.yml](./packages.yml)
+
+    ```bash
+    dev dbt clean # clean temp files
+    dev dbt deps # install dependencies (modules)
+    ```
+
+2. ✅ Enable only [relevant data models](./dbt_project.yml#L9-L20) (and disable the rest)
+
+    We will use specific data sources:
+
+    * general – [General]()
+    * direct – [Yandex.Direct](https://docs.mybi.ru/yandeks-direkt-struktura-bazovoy-vygruzki/)
+    * mytarget – [myTarget](https://docs.mybi.ru/mytarget-struktura-bazovoy-vygruzki/)
+    * amocrm – [AmoCRM](https://docs.mybi.ru/amocrm-struktura-bazovoy-vygruzki/)
+    * ga – [Google Analytics](https://docs.mybi.ru/google-analytics-struktura-bazovoy-vygruzki/)
+
+    Confirm with command: `dev dbt ls --resource-type model -s tag:staging`
+
+    ![Confirm specfic data sources enabled](./docs/2_enable_specific_data_sources.gif)
+
+3. ✅ Assign variables
+
+    Certain variable [values have to be set](./dbt_project.yml#L28-46):
+    - source database connection details
+    - database and schema name to find mybi source data
+    - specific `account_id` values to be included
+
+4. ✅ Turn on custom schema management
+    
+    I use [generate_schema_name.sql](./macros/generate_schema_name.sql) macro to set target schema names:
+
+    > Renders a schema name given a custom schema name. In production, this macro
+    > will render out the overriden schema name for a model. Otherwise, the default
+    > schema specified in the active target is used.
+
+    Take a look at [custom_schema_management.sql](https://github.com/kzzzr/mybi-dbt-core/blob/main/macros/custom_schema_management.sql) macro to find out more.
+    
+## Configure data sources
+
+1. [Create](./macros/init_source_data.sql) Clickhouse database of [PostgreSQL Database Engine](https://clickhouse.com/docs/en/engines/database-engines/postgresql/) with source data:
+    
+    ```bash
+    dev dbt run-operation init_source_data
+    ```
+
+    ![Initialized myBI source database](./docs/3_init_source_data.gif)
+
+## Build staging layer models
+
+Staging models are alredy configured for you in mybi_dbt_core package:
+- [source definitions](https://github.com/kzzzr/mybi-dbt-core/blob/main/models/sources/sources.yml)
+- [staging models code](https://github.com/kzzzr/mybi-dbt-core/tree/main/models/staging)
+- [tests and docs](https://github.com/kzzzr/mybi-dbt-core/blob/main/models/staging/general/general.yml)
+
+All you need to do is just build these models in one command:
 
 ```bash
-# launch containers: dbt, clickhouse, postgres
-docker-compose build --no-cache
-docker-compose up -d
-
-# alias running dbt commands in a docker container
-alias dev="docker-compose exec dev"
-
-# test connections
-dev dbt --version
-dev dbt debug
+dev dbt run -s tag:staging
 ```
 
-## Install mybi_dbt_core package
+![Build staging models](./docs/4_build_staging_models.gif)
 
-- [x] Install module via `packages.yml` - `dbt deps`
-- [x] `dbt_project.yml`
-- [x] Enable only relevant sources (and disable the rest) `dbt ls --resource-type model -s tag:ga`
-- [x] Assign variables
-- [x] Turn on custom schema management
+## Model Data Marts
 
-```bash
-# install dependencies (modules)
-dev dbt clean
-dev dbt deps
-```
+With staging models in place we now can proceed to data modeling.
 
-## Build staging layer
+1. Intermediate models include:
 
-- [x] Source dataset (myBI) - `dbt run-operation init_source_data`
-- [x] Build staging layer - `dev dbt run --full-refresh -s tag:staging`
+    - Wide tables for Google Analytics [goals](./models/intermediate/ga/int_ga_goals_facts.sql) and [sessions](./models/intermediate/ga/int_ga_sessions_facts.sql)
+    - Aggregated table for myTarget [campaigns facts](./models/intermediate/mytarget/int_mytarget_campaigns_facts.sql)
+    - Aggregated tables for Yandex.Direct [context](./models/intermediate/yd/int_yd_campaigns_facts_context.sql) and [search](./models/intermediate/yd/int_yd_campaigns_facts_search.sql) facts
+    - [Comprehensive testing](./models/intermediate/intermediate.yml)
 
-```bash
-# build and test on dummy data
-dev dbt ls --resource-type model -s tag:staging # tag:ga
-dev dbt run-operation init_source_data
-dev dbt run --full-refresh -s tag:staging # stg_ga_devices 
-```
+    ```bash
+    dev dbt build --full-refresh -s tag:intermediate
+    ```
 
-## Build data models
+2. Data Marts include:
 
-- [x] Transformations (business value)
-DAG screenshot
-- [x] Tests & Docs
+    - [Costs](./models/marts/f_costs.sql) (uniting Yandex.Direct + myTarget)
+    - [Google Analytics events](./models/marts/f_ga_events.sql) (uniting sessions and goal completions)
+    - [Tracker](./models/marts/f_tracker.sql) which combines costs and events in a single table
 
-```bash
-dev dbt build --full-refresh -s tag:staging+ --exclude tag:staging
-```
+    ```bash
+    dev dbt build --full-refresh -s tag:marts
+    ```
+
+    Take a look at the project graph (DAG):
+
+    ![Data marts graph](./docs/5_marts_graph.png)
 
 ## Visualize on a dashboard
 
-- [x] Visualize with BI tool
+Now we are ready to visualize key metrics on a dashboard.
 
-Metabase backup H2 database:
+I have configured Clickhouse connection and prepared Metabase dashboard which you can access at http://localhost:3000/dashboard/1-mybi-tutorial:
+- Email address: `mybi@dbt.tutorial`
+- Password: `tutorial101`
 
-```bash
-docker-compose cp metabase:/metabase.db ./metabase/
-docker-compose exec metabase bash
-```
+![Explore data from Metabase dashboard](./docs/6_metabase_dashboard.gif)
 
-Access dashboard at http://localhost:3000/dashboard/1-mybi-tutorial
-mybi@dbt.tutorial
-tutorial101
+You may explore data from Metabase yourself or even build your own dashboard.
 
-## View project docs
 
-- [ч] dbt Docs step
+## Publish dbt project docs
+
+dbt Docs can be easily served locally on http://localhost:8080:
 
 ```bash
 dev dbt docs generate
 dev dbt docs serve
 ```
 
-https://kzzzr.github.io/mybi-dbt-showcase/#!/overview
+Or you may access pre-build version from [Github Pages](https://kzzzr.github.io/mybi-dbt-showcase/#!/overview):
+
+![Access dbt project docs](./docs/7_dbt_docs.gif)
 
 ## Introduce Continuous Integration
 
 - [x] Protect master branch
 - [x] Introduce CI
 
-Let's say you want to introduce some changes to code.
-How to ensure data quality?
+Let's say you want to introduce some code changes.
+How do you ensure data quality?
 
 ## Contributing
 
-Development workflow looks like this: 
-
-```bash
-# launch containers: dbt, clickhouse, postgres
-docker-compose build --no-cache
-docker-compose up -d
-
-# alias running dbt commands in a docker container
-alias dev="docker-compose exec dev"
-
-# test connections
-dev dbt --version
-dev dbt debug
-
-# introduce any code changes
-
-# install dependencies (modules)
-dev dbt clean
-dev dbt deps
-
-# build and test on dummy data
-dev dbt run-operation init_source_data
-dev dbt run --full-refresh -s tag:staging
-dev dbt build --full-refresh -s tag:staging+ --exclude tag:staging
-
-# exit container and clean up
-docker-compose down
-```
+If you have any questions or comments please create an issue.
