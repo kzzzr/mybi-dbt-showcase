@@ -38,10 +38,6 @@ jobs:
         uses: kzzzr/mybi-dbt-action@v4
         with:
           command: dbt run-operation init_source_data
-      - name: dbt seed
-        uses: kzzzr/mybi-dbt-action@v4
-        with:
-          command: dbt seed --full-refresh
       - name: dbt build
         uses: kzzzr/mybi-dbt-action@v4
         with:

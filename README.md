@@ -1,10 +1,4 @@
-# Demo project (tutorial)
-
-TODO:
-- [ ] README.md with steps & GIFs
-- [ ] Table of contents
-- [x] TODO: release versions, install from tag not branch
-- [x] Pin repository
+# myBI Market + dbt demo project
 
 ![](https://habrastorage.org/webt/l-/1r/pq/l-1rpqoplxi-503grfeyyglux8g.jpeg)
 
@@ -16,15 +10,26 @@ This repo guides you through building analyics for [myBI Market](https://market.
 - Metabase (Business Intelligence)
 - Github Actions (Continuous Integration + Deployment)
 
-Prerequisites:
-- IDE (e.g. [VS Code](https://code.visualstudio.com/docs/setup/setup-overview))
-- [Docker](https://docs.docker.com/engine/install/)
+## Table of Contents
+
+1. [Configure environment](#configure-environment)
+2. [Install and configure mybi_dbt_core package](#install-and-configure-mybi_dbt_core-package)
+3. [Configure data sources](#configure-data-sources)
+4. [Build staging layer models](#build-staging-layer-models)
+5. [Model Data Marts](#model-data-marts)
+6. [Visualize on a dashboard](#visualize-on-a-dashboard)
+7. [Publish dbt project docs](#publish-dbt-project-docs)
+8. [Introduce Continuous Integration](#introduce-continuous-integration)
 
 ## Configure environment
 
-1. Fork & Clone this repository and open in IDE
+1. Install prerequisites:
+    - IDE (e.g. [VS Code](https://code.visualstudio.com/docs/setup/setup-overview))
+    - [Docker](https://docs.docker.com/engine/install/)
 
-2. Spin up Docker containers
+2. Fork & Clone this repository and open in IDE
+
+3. Spin up Docker containers
 
     All the services are configured via [Docker containers](./docker-compose.yml).
 
@@ -47,7 +52,7 @@ Prerequisites:
 
     ![Spin up Docker containers](./docs/1_docker_containers.gif)
 
-## Install and configure mybi_dbt_core package
+## Install and configure [mybi_dbt_core](https://github.com/kzzzr/mybi-dbt-core) package
 
 1. Install module via [packages.yml](./packages.yml)
 
@@ -56,7 +61,7 @@ Prerequisites:
     dev dbt deps # install dependencies (modules)
     ```
 
-2. ✅ Enable only [relevant data models](./dbt_project.yml#L9-L20) (and disable the rest)
+2. ✅ Enable only [relevant data models](./dbt_project.yml#L7-L20) (and disable the rest)
 
     We will use specific data sources:
 
@@ -72,7 +77,7 @@ Prerequisites:
 
 3. ✅ Assign variables
 
-    Certain variable [values have to be set](./dbt_project.yml#L28-46):
+    Certain variable [values have to be set](./dbt_project.yml#L28-L46):
     - source database connection details
     - database and schema name to find mybi source data
     - specific `account_id` values to be included
@@ -99,7 +104,7 @@ Prerequisites:
 
 ## Build staging layer models
 
-Staging models are alredy configured for you in mybi_dbt_core package:
+Staging models are alredy configured for you in [mybi_dbt_core](https://github.com/kzzzr/mybi-dbt-core) package:
 - [source definitions](https://github.com/kzzzr/mybi-dbt-core/blob/main/models/sources/sources.yml)
 - [staging models code](https://github.com/kzzzr/mybi-dbt-core/tree/main/models/staging)
 - [tests and docs](https://github.com/kzzzr/mybi-dbt-core/blob/main/models/staging/general/general.yml)
@@ -169,11 +174,15 @@ Or you may access pre-build version from [Github Pages](https://kzzzr.github.io/
 
 ## Introduce Continuous Integration
 
-- [x] Protect master branch
-- [x] Introduce CI
+Let's say you want to introduce some code changes. How do you ensure data quality?
 
-Let's say you want to introduce some code changes.
-How do you ensure data quality?
+You protect your `main` branch and require Pull Requests to have:
+- ✅ [Continuous Integration checks](./.github/workflows/ci.yml) successfully pass
+- ✅ Code review from team member of Code Owner
+
+![Continuous Integration Checks](./docs/8_ci_checks.gif)
+
+This way you make sure to deploy high quality and functional code.
 
 ## Contributing
 
