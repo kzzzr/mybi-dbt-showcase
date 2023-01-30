@@ -15,6 +15,6 @@
     
     {% set result = run_query(sql) %}
 
-    {{ print('Initialized source database') }}
+    {{ print('Initialized myBI source database') }}
 
 {%- endmacro %}
