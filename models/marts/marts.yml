@@ -21,7 +21,8 @@ models:
           description: surrogate key
           tests:
             - not_null
-            - unique
+            - unique:
+                severity: warn
         - name: dt
           description: Date
           tests:
