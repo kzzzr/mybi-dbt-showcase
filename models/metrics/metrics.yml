@@ -33,7 +33,7 @@ metrics:
     description: ''
 
     calculation_method: derived
-    expression: {{ metric('costs') }} / {{ metric('clicks') }}
+    expression: "{{ metric('costs') }} / {{ metric('clicks') }}"
 
     timestamp: dt
     time_grains: [day, week, month, quarter, year]
