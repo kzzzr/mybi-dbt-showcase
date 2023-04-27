@@ -1,0 +1,36 @@
+cubes:
+  - name: f_tracker
+    sql: SELECT * FROM analytics.f_tracker
+    measures:
+      - name: costs
+        sql: cost
+        type: sum
+      - name: clicks
+        sql: clicks
+        type: sum
+      - name: CPC
+        sql: '{CUBE.costs} / nullif(coalesce({CUBE.clicks}, 1), 0)'
+        type: number
+    dimensions:
+      - name: date
+        sql: 'dt'
+        type: time
+      - name: traffic_grouping
+        sql: traffic_grouping
+        type: string
+      - name: traffic_source
+        sql: traffic_source
+        type: string
+      - name: traffic_medium
+        sql: traffic_medium
+        type: string
+      - name: traffic_campaign
+        sql: traffic_campaign
+        type: string
+      - name: device_category
+        sql: device_category
+        type: string
+      - name: location_country
+        sql: location_country
+        type: string
+    dataSource: default
