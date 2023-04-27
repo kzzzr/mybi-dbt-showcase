@@ -13,13 +13,14 @@ This repo guides you through building analyics for [myBI Market](https://market.
 ## Table of Contents
 
 1. [Configure environment](#configure-environment)
-2. [Install and configure mybi_dbt_core package](#install-and-configure-mybi_dbt_core-package)
-3. [Configure data sources](#configure-data-sources)
-4. [Build staging layer models](#build-staging-layer-models)
-5. [Model Data Marts](#model-data-marts)
-6. [Visualize on a dashboard](#visualize-on-a-dashboard)
-7. [Publish dbt project docs](#publish-dbt-project-docs)
-8. [Introduce Continuous Integration](#introduce-continuous-integration)
+1. [Install and configure mybi_dbt_core package](#install-and-configure-mybi_dbt_core-package)
+1. [Configure data sources](#configure-data-sources)
+1. [Build staging layer models](#build-staging-layer-models)
+1. [Model Data Marts](#model-data-marts)
+1. [Set up metrics layer](#set-up-metrics-layer)
+1. [Visualize on a dashboard](#visualize-on-a-dashboard)
+1. [Publish dbt project docs](#publish-dbt-project-docs)
+1. [Introduce Continuous Integration](#introduce-continuous-integration)
 
 ## Configure environment
 
@@ -33,21 +34,24 @@ This repo guides you through building analyics for [myBI Market](https://market.
 
     All the services are configured via [Docker containers](./docker-compose.yml).
 
-    - dbt
     - Clickhouse
     - Metabase
+    - Cube
 
     ```bash
-    # launch containers: dbt, clickhouse, metabase
+    # launch containers: clickhouse, metabase, cube
     docker-compose build --no-cache
     docker-compose up -d
+    ```
 
-    # alias running dbt commands in a docker container
-    alias dev="docker-compose exec dev"
+4. Open dev container with dbt installed
+
+    ```bash
+    devcontainer open .
 
     # test connections
-    dev dbt --version
-    dev dbt debug
+    dbt --version
+    dbt debug
     ```
 
     ![Spin up Docker containers](./docs/1_docker_containers.gif)
@@ -57,8 +61,8 @@ This repo guides you through building analyics for [myBI Market](https://market.
 1. Install module via [packages.yml](./packages.yml)
 
     ```bash
-    dev dbt clean # clean temp files
-    dev dbt deps # install dependencies (modules)
+    dbt clean # clean temp files
+    dbt deps # install dependencies (modules)
     ```
 
 2. ✅ Enable only [relevant data models](./dbt_project.yml#L7-L20) (and disable the rest)
@@ -71,7 +75,7 @@ This repo guides you through building analyics for [myBI Market](https://market.
     * amocrm – [AmoCRM](https://docs.mybi.ru/amocrm-struktura-bazovoy-vygruzki/)
     * ga – [Google Analytics](https://docs.mybi.ru/google-analytics-struktura-bazovoy-vygruzki/)
 
-    Confirm with command: `dev dbt ls --resource-type model -s tag:staging`
+    Confirm with command: `dbt ls --resource-type model -s tag:staging`
 
     ![Confirm specfic data sources enabled](./docs/2_enable_specific_data_sources.gif)
 
@@ -97,7 +101,7 @@ This repo guides you through building analyics for [myBI Market](https://market.
 1. [Create](./macros/init_source_data.sql) Clickhouse database of [PostgreSQL Database Engine](https://clickhouse.com/docs/en/engines/database-engines/postgresql/) with source data:
     
     ```bash
-    dev dbt run-operation init_source_data
+    dbt run-operation init_source_data
     ```
 
     ![Initialized myBI source database](./docs/3_init_source_data.gif)
@@ -112,7 +116,7 @@ Staging models are alredy configured for you in [mybi_dbt_core](https://github.c
 All you need to do is just build these models in one command:
 
 ```bash
-dev dbt run -s tag:staging
+dbt build -s tag:staging
 ```
 
 ![Build staging models](./docs/4_build_staging_models.gif)
@@ -129,7 +133,7 @@ With staging models in place we now can proceed to data modeling.
     - [Comprehensive testing](./models/intermediate/intermediate.yml)
 
     ```bash
-    dev dbt build --full-refresh -s tag:intermediate
+    dbt build -s tag:intermediate
     ```
 
 2. Data Marts include:
@@ -139,12 +143,26 @@ With staging models in place we now can proceed to data modeling.
     - [Tracker](./models/marts/f_tracker.sql) which combines costs and events in a single table
 
     ```bash
-    dev dbt build --full-refresh -s tag:marts
+    dbt build --full-refresh -s tag:marts
     ```
 
     Take a look at the project graph (DAG):
 
     ![Data marts graph](./docs/5_marts_graph.png)
+
+## Set up metrics layer
+
+## dbt Metrics
+
+- Define dbt Metrics in [metrics.yml](./models/metrics/metrics.yml)
+- Access dbt Metrics via materalizing in [f_metrics.sql](./models/metrics/f_metrics.sql)
+
+## Cube Metrics
+
+- Define dbt Metrics in [f_tracker.yml](./schema/f_tracker.yml)
+- Access dbt Metrics through [Cube playground](http://localhost:4000/#/build?query={%22measures%22:[%22f_tracker.costs%22,%22f_tracker.clicks%22,%22f_tracker.CPC%22],%22order%22:{%22f_tracker.costs%22:%22desc%22},%22dimensions%22:[%22f_tracker.location_country%22],%22timeDimensions%22:[{%22dimension%22:%22f_tracker.date%22,%22granularity%22:%22week%22,%22dateRange%22:%22This%20month%22}]}) or [Metabase](http://localhost:3000/question/13-cubejs-sample-viz)
+
+![Cube Playground](./docs/9_cube_playground.png)
 
 ## Visualize on a dashboard
 
@@ -164,8 +182,8 @@ You may explore data from Metabase yourself or even build your own dashboard.
 dbt Docs can be easily served locally on http://localhost:8080:
 
 ```bash
-dev dbt docs generate
-dev dbt docs serve
+dbt docs generate
+dbt docs serve
 ```
 
 Or you may access pre-build version from [Github Pages](https://kzzzr.github.io/mybi-dbt-showcase/#!/overview):
