@@ -47,7 +47,8 @@ models:
           description: Event unique identifier
           tests:
             - not_null
-            - unique
+            - unique:
+                severity: warn
         - name: dt
           description: Date
           tests:

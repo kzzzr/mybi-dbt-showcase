@@ -1,13 +1,6 @@
 version: '2'
 services:
 
-  dev:
-    build: .
-    volumes:
-      - .:/usr/app/
-    ports:
-      - 8080:8080
-
   clickhouse:
     image: clickhouse/clickhouse-server:22.3
     ports:
@@ -24,3 +17,13 @@ services:
       - MB_DB_FILE=/metabase.db
     ports: 
       - 3000:3000
+
+  cube:
+    image: cubejs/cube:latest
+    ports:
+      - 4000:4000
+      - 15432:15432
+    env_file:
+      - .env      
+    volumes:
+      - .:/cube/conf

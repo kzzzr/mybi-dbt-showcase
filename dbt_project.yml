@@ -27,6 +27,10 @@ models:
         marts:
             +tags: ["marts"]
 
+    metrics:
+      dbt_metrics_default_calendar:
+        enabled: false
+        
 vars:
     mybi_host: 'rc1a-uifqtk602qck1es3.mdb.yandexcloud.net'
     mybi_port: 6432

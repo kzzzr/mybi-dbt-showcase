@@ -1,0 +1,41 @@
+version: 2
+
+metrics:
+
+  - name: costs
+    label: 'Costs spent (RUB)'
+    model: ref('f_tracker')
+    description: ''
+
+    calculation_method: sum
+    expression: cost
+
+    timestamp: dt
+    time_grains: [day, week, month, quarter, year]
+
+    dimensions: [traffic_grouping, traffic_source, traffic_medium, traffic_campaign, device_category, location_country]
+
+  - name: clicks
+    label: 'Clicks'
+    model: ref('f_tracker')
+    description: ''
+
+    calculation_method: sum
+    expression: clicks
+
+    timestamp: dt
+    time_grains: [day, week, month, quarter, year]
+
+    dimensions: [traffic_grouping, traffic_source, traffic_medium, traffic_campaign, device_category, location_country]
+
+  - name: cpc
+    label: 'Cost per Click'
+    description: ''
+
+    calculation_method: derived
+    expression: "{{ metric('costs') }} / {{ metric('clicks') }}"
+
+    timestamp: dt
+    time_grains: [day, week, month, quarter, year]
+
+    dimensions: [traffic_grouping, traffic_source, traffic_medium, traffic_campaign, device_category, location_country]

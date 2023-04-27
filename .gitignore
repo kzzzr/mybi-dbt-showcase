@@ -5,3 +5,7 @@ logs/
 
 /metabase/plugins/*
 !clickhouse.metabase-driver.jar
+
+.DS_Store
+
+.cubestore/

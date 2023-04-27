@@ -11,8 +11,8 @@ mybi_dbt_showcase:
     prod:
       type: clickhouse
       host: clickhouse
-      driver: native
-      port: 9000
+      port: 8123
       user: default
       schema: analytics
       threads: 3
+      custom_settings: { enable_positional_arguments: 1}
