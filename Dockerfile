@@ -3,7 +3,7 @@ FROM fishtownanalytics/dbt:${DBT_VERSION}
 
 RUN set -ex \
     && python -m pip install --upgrade pip setuptools \
-    && python -m pip install --upgrade dbt-clickhouse
+    && python -m pip install --upgrade dbt-clickhouse numpy
 
 WORKDIR /usr/app/
 ENV DBT_PROFILES_DIR=.
