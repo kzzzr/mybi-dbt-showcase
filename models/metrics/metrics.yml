@@ -28,6 +28,19 @@ metrics:
 
     dimensions: [traffic_grouping, traffic_source, traffic_medium, traffic_campaign, device_category, location_country]
 
+  - name: actions
+    label: 'Actions'
+    model: ref('f_tracker')
+    description: ''
+
+    calculation_method: count
+    expression: event_id
+
+    timestamp: dt
+    time_grains: [day, week, month, quarter, year]
+
+    dimensions: [traffic_grouping, traffic_source, traffic_medium, traffic_campaign, device_category, location_country]
+    
   - name: cpc
     label: 'Cost per Click'
     description: ''
@@ -39,3 +52,16 @@ metrics:
     time_grains: [day, week, month, quarter, year]
 
     dimensions: [traffic_grouping, traffic_source, traffic_medium, traffic_campaign, device_category, location_country]
+
+  - name: cpa
+    label: 'Cost per Action'
+    description: ''
+
+    calculation_method: derived
+    expression: "{{ metric('costs') }} / {{ metric('actions') }}"
+
+    timestamp: dt
+    time_grains: [day, week, month, quarter, year]
+
+    dimensions: [traffic_grouping, traffic_source, traffic_medium, traffic_campaign, device_category, location_country]
+
