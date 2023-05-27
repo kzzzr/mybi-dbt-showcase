@@ -41,3 +41,16 @@ models:
           description: Date
           tests:
             - not_null
+
+    - name: f_immersions
+      columns:
+        - name: cost_id
+          description: surrogate key
+          tests:
+            - not_null
+            - unique:
+                severity: warn
+        - name: dt
+          description: Date
+          tests:
+            - not_null
