@@ -39,3 +39,15 @@ metrics:
     time_grains: [day, week, month, quarter, year]
 
     dimensions: [traffic_grouping, traffic_source, traffic_medium, traffic_campaign, device_category, location_country]
+
+  - name: cfc
+    label: 'Click for 1 Cost'
+    description: ''
+
+    calculation_method: derived
+    expression: "{{ metric('clicks') }} / {{ metric('costs') }}"
+
+    timestamp: dt
+    time_grains: [day, week, month, quarter, year]
+
+    dimensions: [traffic_grouping, traffic_source, traffic_medium, traffic_campaign, device_category, location_country]  

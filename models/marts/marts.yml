@@ -41,3 +41,22 @@ models:
           description: Date
           tests:
             - not_null
+    
+    - name: f_tracker_now_year_new_visitor
+      description: Summary of Google Analytics Events and Costs for New Visitor in now year
+      columns:
+        # - name: event_id
+        #   description: surrogate key
+        #   tests:
+        #     - not_null
+        #     - unique:
+        #         severity: warn
+        # - name: dt
+        #   description: Date
+        #   tests:
+        #     - not_null
+        - name: user_type
+          description: only New Visitor
+          tests:
+            - accepted_values:
+                values: [New Visitor]
