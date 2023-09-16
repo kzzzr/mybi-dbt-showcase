@@ -164,6 +164,9 @@ With staging models in place we now can proceed to data modeling.
 
 ![Cube Playground](./docs/9_cube_playground.png)
 
+- Example in my cube playground
+![Alt text](image.png)
+
 ## Visualize on a dashboard
 
 Now we are ready to visualize key metrics on a dashboard.
@@ -173,6 +176,9 @@ I have configured Clickhouse connection and prepared Metabase dashboard which yo
 - Password: `tutorial101`
 
 ![Explore data from Metabase dashboard](./docs/6_metabase_dashboard.gif)
+
+Example
+![Alt text](image-1.png)
 
 You may explore data from Metabase yourself or even build your own dashboard.
 
@@ -188,7 +194,12 @@ dbt docs serve
 
 Or you may access pre-build version from [Github Pages](https://kzzzr.github.io/mybi-dbt-showcase/#!/overview):
 
+
+
 ![Access dbt project docs](./docs/7_dbt_docs.gif)
+
+Example
+![Alt text](image-2.png)
 
 ## Introduce Continuous Integration
 
