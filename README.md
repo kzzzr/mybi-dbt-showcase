@@ -37,16 +37,10 @@ This repo guides you through building analyics for [myBI Market](https://market.
     - Clickhouse
     - Metabase
     - Cube
+    - devcontainer (with dbt installed)
 
     ```bash
-    # launch containers: clickhouse, metabase, cube
-    docker-compose build --no-cache
-    docker-compose up -d
-    ```
-
-4. Open dev container with dbt installed
-
-    ```bash
+    devcontainer build .
     devcontainer open .
 
     # test connections

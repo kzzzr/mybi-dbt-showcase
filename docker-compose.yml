@@ -1,8 +1,16 @@
 version: '2'
 services:
 
+  devcontainer:
+    build: .
+    entrypoint: ["tail", "-f", "/dev/null"]
+    # env_file:
+    #   - .env
+    volumes:
+      - .:/workspaces/mybi_dbt_showcase/
+
   clickhouse:
-    image: clickhouse/clickhouse-server:22.3
+    image: clickhouse/clickhouse-server:23.3
     ports:
       - 9000:9000
       - 8123:8123
@@ -24,6 +32,6 @@ services:
       - 4000:4000
       - 15432:15432
     env_file:
-      - .env      
+      - .env
     volumes:
       - .:/cube/conf
