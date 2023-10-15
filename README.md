@@ -162,6 +162,7 @@ With staging models in place we now can proceed to data modeling.
  ![Cube Playground](MyCubePlayground.jpg)
 
  ![Cube Playground](New_Cube_measures.jpg)
+ 
 
 
 ## Visualize on a dashboard
