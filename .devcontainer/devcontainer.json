@@ -1,16 +1,23 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 // README at: https://github.com/devcontainers/templates/tree/main/src/docker-existing-dockerfile
 {
-	"name": "Existing Dockerfile",
-	"build": {
+	//"name": "Existing Dockerfile",
+	//"build": {
 		// Sets the run context to one level up instead of the .devcontainer folder.
 		// "context": "."
 		// Update the 'dockerFile' property if you aren't using the standard 'Dockerfile' filename.
-		"dockerfile": "../Dockerfile"
-	},
+	//	"dockerfile": "../Dockerfile"
+	//},
 
-	// Features to add to the dev container. More info: https://containers.dev/features.
-	// "features": {},
+	"name": "Existing Docker Compose (Extend)",
+
+	"dockerComposeFile": [
+		"../docker-compose.yml"
+	],
+
+	"service": "devcontainer",
+	//"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+	"workspaceFolder": "/workspaces/mybi_dbt_showcase/",
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	"forwardPorts": [
@@ -38,9 +45,9 @@
 			"userGid": "automatic"
 		},
 		"ghcr.io/stuartleeks/dev-container-features/shell-history:0": {}
-	},
+	}
 
-    "runArgs": ["--env-file",".env", "--network=mybi-dbt-showcase_default"]
+    //"runArgs": ["--env-file",".env", "--network=mybi-dbt-showcase_default"]
     
 	// Uncomment the next line to run commands after the container is created.
 	// "postCreateCommand": "cat /etc/os-release",

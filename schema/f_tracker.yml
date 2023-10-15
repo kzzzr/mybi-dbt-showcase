@@ -2,6 +2,10 @@ cubes:
   - name: f_tracker
     sql: SELECT * FROM analytics.f_tracker
     measures:
+      - name: count_days
+        description: '# Count of days'
+        sql: dt
+        type: countDistinct
       - name: costs
         sql: cost
         type: sum
@@ -10,6 +14,32 @@ cubes:
         type: sum
       - name: CPC
         sql: '{CUBE.costs} / nullif(coalesce({CUBE.clicks}, 1), 0)'
+        type: number
+      - name: bounces
+        description: '# Bounces'
+        sql: bounces
+        type: sum
+      - name: bounces_avg
+        description: '# Bounces Average'
+        sql: '{CUBE.bounces} / nullif(coalesce({CUBE.count_days}, 1), 0)'
+        type: number
+      - name: sessions
+        description: '# Sessions'
+        sql: sessions
+        type: sum
+      - name: bounce_rate
+        description: '% Bounce Rate'
+        sql: '{CUBE.bounces} / nullif(coalesce({CUBE.sessions}, 1), 0)'
+        type: number
+      - name: sessions_yandex
+        description: '# Sessions Yandex'
+        sql: sessions
+        type: sum
+        filters:  
+        - sql: "{CUBE}.traffic_source = 'yandex'"
+      - name: session_yndex_rate
+        description: '% Sessions Yandex Rate'
+        sql: '{CUBE.sessions_yandex} / nullif(coalesce({CUBE.sessions}, 1), 0)'
         type: number
     dimensions:
       - name: date
