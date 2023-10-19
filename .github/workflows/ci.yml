@@ -45,7 +45,7 @@ jobs:
       - name: cube api
         uses: kzzzr/mybi-dbt-action@v4
         with:
-          command:  curl -H "Authorization: token" -G --data-urlencode 'query={"measures":["f_tracker.bounces"]}' http://cube:4000/cubejs-api/v1/load  
+          command: curl -H "Authorization:token" -G --data-urlencode 'query={"measures":["f_tracker.bounces"]}' http://cube:4000/cubejs-api/v1/load  
       # - name: Setup tmate session
       #   uses: mxschmitt/action-tmate@v3
       #   if: ${{ failure() }}
