@@ -1,0 +1,20 @@
+config:
+    send_anonymous_usage_stats: True
+    use_colors: True
+    partial_parse: False
+
+mybi_dbt_cube:
+  target: prod
+
+  outputs:
+  
+    prod:
+      type: postgres
+      host: cube
+      user: test
+      password: password
+      port: 15432
+      dbname: postgres
+      schema: public
+      threads: 3
+      custom_settings: { enable_positional_arguments: 1}    
