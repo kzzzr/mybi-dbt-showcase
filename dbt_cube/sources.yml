@@ -1,0 +1,11 @@
+version: 2
+
+sources:
+
+  name: public
+  config:
+      enabled: true
+  database: postgres
+  schema: public
+  tables:
+    - name: f_tracker

@@ -32,21 +32,8 @@ This repo guides you through building analyics for [myBI Market](https://market.
 
 3. Spin up Docker containers
 
-    All the services are configured via [Docker containers](./docker-compose.yml).
-
-    - Clickhouse
-    - Metabase
-    - Cube
-
     ```bash
-    # launch containers: clickhouse, metabase, cube
-    docker-compose build --no-cache
-    docker-compose up -d
-    ```
-
-4. Open dev container with dbt installed
-
-    ```bash
+    devcontainer build .
     devcontainer open .
 
     # test connections
@@ -164,6 +151,8 @@ With staging models in place we now can proceed to data modeling.
 
 ![Cube Playground](./docs/9_cube_playground.png)
 
+![My example with Cube](image.png)
+
 ## Visualize on a dashboard
 
 Now we are ready to visualize key metrics on a dashboard.
@@ -173,6 +162,7 @@ I have configured Clickhouse connection and prepared Metabase dashboard which yo
 - Password: `tutorial101`
 
 ![Explore data from Metabase dashboard](./docs/6_metabase_dashboard.gif)
+![My example with Metabase](image-1.png)
 
 You may explore data from Metabase yourself or even build your own dashboard.
 
@@ -185,6 +175,8 @@ dbt Docs can be easily served locally on http://localhost:8080:
 dbt docs generate
 dbt docs serve
 ```
+
+![dbt docs](image-2.png)
 
 Or you may access pre-build version from [Github Pages](https://kzzzr.github.io/mybi-dbt-showcase/#!/overview):
 
