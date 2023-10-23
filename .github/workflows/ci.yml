@@ -1,8 +1,8 @@
 name: Continuous Integration Tests
 
-on:
-  pull_request:
-    branches: [ main ]
+on: [push]
+  # pull_request:
+  #   branches: [ main ]
 concurrency: 
   group: ${{ github.ref }}
   cancel-in-progress: true  
