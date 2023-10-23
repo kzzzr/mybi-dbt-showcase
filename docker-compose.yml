@@ -1,6 +1,15 @@
 version: '2'
 services:
 
+  devcontainer:
+    build: .
+    entrypoint: ["tail", "-f", "/dev/null"]
+    # env_file:
+    #   - .env
+    volumes:
+      - .:/workspaces/mybi_dbt_showcase/
+
+
   clickhouse:
     image: clickhouse/clickhouse-server:22.3
     ports:
