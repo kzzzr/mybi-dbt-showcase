@@ -4,4 +4,4 @@
     )
 }}
 
-select sessions,bounces  from f_tracker
+select sessions from f_tracker

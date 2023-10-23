@@ -42,10 +42,6 @@ jobs:
         uses: kzzzr/mybi-dbt-action@v4
         with:
           command: dbt build --full-refresh
-      - name: dbt test
-        uses: kzzzr/mybi-dbt-action@v4
-        with:
-          command: dbt test
       - name: install curl
         run: sudo apt-get update && sudo apt-get install curl -y
       - name: testing cube api
