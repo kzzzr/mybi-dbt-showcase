@@ -1,6 +1,11 @@
 version: '2'
 services:
 
+  devcontainer:
+    build: .
+    volumes:
+      - .:/workspaces/mybi_dbt_showcase/
+
   clickhouse:
     image: clickhouse/clickhouse-server:22.3
     ports:
