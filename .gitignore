@@ -2,6 +2,7 @@
 target/
 dbt_packages/
 logs/
+dbt-env/
 
 /metabase/plugins/*
 !ch.jar
