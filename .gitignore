@@ -4,7 +4,7 @@ dbt_packages/
 logs/
 
 /metabase/plugins/*
-!clickhouse.metabase-driver.jar
+!ch.jar
 
 .DS_Store
 

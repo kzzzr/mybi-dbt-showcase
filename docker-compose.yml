@@ -8,7 +8,7 @@ services:
       - 8123:8123
 
   metabase:
-    image: metabase/metabase:v0.44.6
+    image: metabase/metabase:v0.47.2
     volumes:
       - ./metabase/plugins:/plugins
       - ./metabase/metabase.db:/metabase.db/
