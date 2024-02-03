@@ -41,7 +41,7 @@ jobs:
       - name: dbt deps
         uses: kzzzr/mybi-dbt-action@v4
         with:
-          command: dbt deps
+          command: dbt --no-version-check deps
       - name: dbt docs
         uses: kzzzr/mybi-dbt-action@v4
         with:
