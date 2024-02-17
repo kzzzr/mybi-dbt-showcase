@@ -2,7 +2,7 @@ name: Continuous Integration Tests
 
 on:
   pull_request:
-    branches: [ main ]
+    branches: [ аdvanced_DWH_сonfiguring_CI_dbt_modules_External_tables ]
 concurrency: 
   group: ${{ github.ref }}
   cancel-in-progress: true  
