@@ -28,23 +28,23 @@ jobs:
       - name: wait for services to start up
         run: sleep 10
       - name: dbt version
-        uses: savadevel/mybi-dbt-action@v1
+        uses: savadevel/mybi-dbt-action@v2
         with:
           command: dbt --version
       - name: dbt debug
-        uses: savadevel/mybi-dbt-action@v1
+        uses: savadevel/mybi-dbt-action@v2
         with:
           command: dbt debug          
       - name: dbt deps
-        uses: savadevel/mybi-dbt-action@v1
+        uses: savadevel/mybi-dbt-action@v2
         with:
           command: dbt deps
       - name: dbt init_source_data 
-        uses: savadevel/mybi-dbt-action@v1
+        uses: savadevel/mybi-dbt-action@v2
         with:
           command: dbt run-operation init_source_data
       - name: dbt build
-        uses: savadevel/mybi-dbt-action@v1
+        uses: savadevel/mybi-dbt-action@v2
         with:
           command: dbt build --full-refresh
       # - name: Setup tmate session
