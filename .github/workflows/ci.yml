@@ -23,30 +23,41 @@ jobs:
           - 9000:9000
           - 8123:8123
     runs-on: ubuntu-latest
+    
     steps:
       - uses: actions/checkout@v3
+    
       - name: wait for services to start up
         run: sleep 10
+
+      - name: Start containers
+        run: docker-compose -f "docker-compose.yml" up -d --build
+      
       - name: dbt version
         uses: savadevel/mybi-dbt-action@v2
         with:
           command: dbt --version
+      
       - name: dbt debug
         uses: savadevel/mybi-dbt-action@v2
         with:
           command: dbt debug          
+      
       - name: dbt deps
         uses: savadevel/mybi-dbt-action@v2
         with:
           command: dbt deps
+      
       - name: dbt init_source_data 
         uses: savadevel/mybi-dbt-action@v2
         with:
           command: dbt run-operation init_source_data
+      
       - name: dbt build
         uses: savadevel/mybi-dbt-action@v2
         with:
           command: dbt build --full-refresh
+      
       # - name: Setup tmate session
       #   uses: mxschmitt/action-tmate@v3
       #   if: ${{ failure() }}
