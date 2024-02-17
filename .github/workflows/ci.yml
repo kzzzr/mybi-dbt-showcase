@@ -1,8 +1,13 @@
 name: Continuous Integration Tests
 
 on:
-  pull_request:
-    branches: [ main ]
+  workflow_dispatch:
+  # See https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#pull_request_target
+  pull_request_target:
+    types:
+      - closed
+    branches:
+      - main    
 concurrency: 
   group: ${{ github.ref }}
   cancel-in-progress: true  
@@ -11,39 +16,60 @@ jobs:
   ci:
     name: Continuous Integration Tests
     timeout-minutes: 30
-    services:
-      clickhouse:
-        image: clickhouse/clickhouse-server:22.3
-        ports:
-          - 9000:9000
-          - 8123:8123
+    #services:
+    #  clickhouse:
+    #    image: clickhouse/clickhouse-server:22.3
+    #    ports:
+    #      - 9000:9000
+    #      - 8123:8123
     runs-on: ubuntu-latest
+    
     steps:
       - uses: actions/checkout@v3
+    
       - name: wait for services to start up
         run: sleep 10
+
+      - name: Start containers
+        run: docker-compose -f "docker-compose.yml" up -d --build
+
+      - name: wait for docker to start up
+        run: sleep 10
+        
       - name: dbt version
-        uses: kzzzr/mybi-dbt-action@v4
+        uses: savadevel/mybi-dbt-action@v2
         with:
           command: dbt --version
+
+      - name: show dockers 
+        run: docker ps
+      
       - name: dbt debug
-        uses: kzzzr/mybi-dbt-action@v4
+        uses: savadevel/mybi-dbt-action@v2
         with:
           command: dbt debug          
+      
       - name: dbt deps
-        uses: kzzzr/mybi-dbt-action@v4
+        uses: savadevel/mybi-dbt-action@v2
         with:
           command: dbt deps
+      
       - name: dbt init_source_data 
-        uses: kzzzr/mybi-dbt-action@v4
+        uses: savadevel/mybi-dbt-action@v2
         with:
           command: dbt run-operation init_source_data
+      
       - name: dbt build
-        uses: kzzzr/mybi-dbt-action@v4
+        uses: savadevel/mybi-dbt-action@v2
         with:
           command: dbt build --full-refresh
+      
       # - name: Setup tmate session
       #   uses: mxschmitt/action-tmate@v3
       #   if: ${{ failure() }}
       #   timeout-minutes: 30
+
+      - name: Stop containers
+        if: always()
+        run: docker-compose -f "docker-compose.yml" down
         

@@ -2,4 +2,4 @@ packages:
   - git: "https://github.com/kzzzr/mybi-dbt-core.git"
     revision: 'v1.0.0'
   - package: dbt-labs/metrics
-    version: [">=1.0.0", "<2.0.0"]
+    version: [">=0.1.0", "<2.0.0"]

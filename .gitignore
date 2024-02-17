@@ -2,9 +2,10 @@
 target/
 dbt_packages/
 logs/
+dbt-env/
 
 /metabase/plugins/*
-!clickhouse.metabase-driver.jar
+!ch.jar
 
 .DS_Store
 

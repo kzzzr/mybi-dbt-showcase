@@ -3,12 +3,13 @@ services:
 
   clickhouse:
     image: clickhouse/clickhouse-server:22.3
+    hostname: clickhouse
     ports:
       - 9000:9000
       - 8123:8123
 
   metabase:
-    image: metabase/metabase:v0.44.6
+    image: metabase/metabase:v0.47.2
     volumes:
       - ./metabase/plugins:/plugins
       - ./metabase/metabase.db:/metabase.db/

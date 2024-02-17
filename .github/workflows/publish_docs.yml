@@ -41,11 +41,11 @@ jobs:
       - name: dbt deps
         uses: kzzzr/mybi-dbt-action@v4
         with:
-          command: dbt deps
+          command: dbt --no-version-check deps
       - name: dbt docs
         uses: kzzzr/mybi-dbt-action@v4
         with:
-          command: dbt docs generate
+          command: dbt docs generate --no-version-check
       - name: Setup Pages
         uses: actions/configure-pages@v2
       - name: Upload artifact
