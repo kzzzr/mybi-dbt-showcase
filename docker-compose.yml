@@ -3,6 +3,7 @@ services:
 
   clickhouse:
     image: clickhouse/clickhouse-server:22.3
+    hostname: clickhouse
     ports:
       - 9000:9000
       - 8123:8123
