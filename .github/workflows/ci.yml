@@ -34,12 +34,15 @@ jobs:
         run: docker-compose -f "docker-compose.yml" up -d --build
 
       - name: wait for docker to start up
-        run: sleep 30
+        run: sleep 10
         
       - name: dbt version
         uses: savadevel/mybi-dbt-action@v2
         with:
           command: dbt --version
+
+      - name: show dockers 
+        run: docker ps
       
       - name: dbt debug
         uses: savadevel/mybi-dbt-action@v2
