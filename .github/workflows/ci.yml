@@ -34,6 +34,14 @@ jobs:
         if: always()
         run: docker-compose -f "docker-compose.yml" down
 
+      - name: Remove containers
+        if: always()
+        run: docker rm -fv $(docker ps -aq)
+
+      - name: Show using port 9000 (clickhouse)
+        if: always()
+        run: sudo lsof -i -P -n | grep 9000
+
       - name: Start containers
         run: docker-compose -f "docker-compose.yml" up -d --build
       
