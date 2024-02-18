@@ -11,6 +11,15 @@ cubes:
       - name: CPC
         sql: '{CUBE.costs} / nullif(coalesce({CUBE.clicks}, 1), 0)'
         type: number
+      - name: 'Bounces'
+        sql: bounces
+        type: sum
+      - name: 'Sessions'
+        sql: sessions
+        type: sum    
+      - name: 'Bounce_rate'
+        sql: '{CUBE.Bounces} / nullif(coalesce({CUBE.Sessions}, 1), 0)'
+        type: number  
     dimensions:
       - name: date
         sql: 'dt'
