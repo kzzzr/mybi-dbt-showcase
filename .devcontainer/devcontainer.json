@@ -2,12 +2,15 @@
 // README at: https://github.com/devcontainers/templates/tree/main/src/docker-existing-dockerfile
 {
 	"name": "Existing Dockerfile",
-	"build": {
+	"dockerComposeFile": [
 		// Sets the run context to one level up instead of the .devcontainer folder.
 		// "context": "."
 		// Update the 'dockerFile' property if you aren't using the standard 'Dockerfile' filename.
-		"dockerfile": "../Dockerfile"
-	},
+		"../docker-compose.yml"
+	],
+
+	"service": "devcontainer",
+	"workspaceFolder": "/workspace",
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
@@ -38,9 +41,7 @@
 			"userGid": "automatic"
 		},
 		"ghcr.io/stuartleeks/dev-container-features/shell-history:0": {}
-	},
-
-    "runArgs": ["--env-file",".env", "--network=mybi-dbt-showcase_default"]
+	}
     
 	// Uncomment the next line to run commands after the container is created.
 	// "postCreateCommand": "cat /etc/os-release",
