@@ -819,3 +819,5 @@ org.h2.jdbc.JdbcSQLException: Database is already closed (to disable automatic c
 	at metabase.core$destroy_BANG_.invoke(core.clj:72)
 	at clojure.lang.AFn.run(AFn.java:22)
 	at java.base/java.lang.Thread.run(Unknown Source)
+2024-02-18 12:36:10 jdbc[6]: exception
+org.h2.jdbc.JdbcSQLException: Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-197]
