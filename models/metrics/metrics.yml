@@ -39,3 +39,35 @@ metrics:
     time_grains: [day, week, month, quarter, year]
 
     dimensions: [traffic_grouping, traffic_source, traffic_medium, traffic_campaign, device_category, location_country]
+  - name: bounces
+    label: '#Bounces'
+    model: ref('f_tracker')
+    calculation_method: sum
+    expression: bounces
+
+    timestamp: dt
+    time_grains: [day, week, month, quarter, year]
+
+    dimensions: [traffic_grouping, traffic_source, traffic_medium, traffic_campaign, device_category, location_country]
+  
+  - name: sessions
+    label: '#Sessions'
+    model: ref('f_tracker')
+    calculation_method: sum
+    expression: sessions
+
+    timestamp: dt
+    time_grains: [day, week, month, quarter, year]
+
+    dimensions: [traffic_grouping, traffic_source, traffic_medium, traffic_campaign, device_category, location_country]
+
+  - name: bounce_rate
+    label: 'Bounce rate'
+    calculation_method: derived
+    expression: "{{metric('bounces')}} / {{metric('sessions')}}" 
+
+    timestamp: dt
+    time_grains: [day, week, month, quarter, year]
+
+    dimensions: [traffic_grouping, traffic_source, traffic_medium, traffic_campaign, device_category, location_country]
+
